@@ -1,5 +1,8 @@
 # causal-toolkit-sovinbirla
 
+[![Tests](https://github.com/sovinbirla/causal-toolkit-sovinbirla/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/sovinbirla/causal-toolkit-sovinbirla/actions/workflows/tests.yml)
+[![PyPI version](https://img.shields.io/pypi/v/causal-toolkit-sovinbirla.svg)](https://pypi.org/project/causal-toolkit-sovinbirla/)
+
 A Python package by Sovin Birla for estimating average treatment effects (ATE)
 and conditional average treatment effects (CATE). It packages the Week 2–4
 course implementations and the Week 5 pytest suite from
@@ -7,7 +10,23 @@ course implementations and the Week 5 pytest suite from
 
 ## Installation
 
-Requires Python 3.10 or newer and [uv](https://docs.astral.sh/uv/).
+Requires Python 3.10 or newer. Install from PyPI:
+
+```bash
+pip install causal-toolkit-sovinbirla
+```
+
+Verify the installation:
+
+```bash
+python -c "from causal_toolkit_sovinbirla import calculate_ate_ci; print('Published!')"
+```
+
+PyPI project: https://pypi.org/project/causal-toolkit-sovinbirla/
+
+## Development installation
+
+Using [uv](https://docs.astral.sh/uv/):
 
 ```bash
 git clone https://github.com/sovinbirla/causal-toolkit-sovinbirla.git
@@ -27,13 +46,12 @@ uv pip install git+https://github.com/sovinbirla/causal-toolkit-sovinbirla.git
 ```
 
 The distribution name is `causal-toolkit-sovinbirla`; the Python import name is
-`causal_toolkit_sovinbirla`. The repository contains a PyPI-ready package;
-version 0.1.0 has not been uploaded to PyPI.
+`causal_toolkit_sovinbirla`.
 
 Scikit-learn is capped below 1.10 because these course implementations use its
 unpenalized logistic regression API, which is deprecated in versions 1.8 and 1.9.
 
-## Randomized trials and propensity scores
+## Quick start: randomized trials and propensity scores
 
 ```python
 import numpy as np
@@ -130,6 +148,43 @@ uv run twine check dist/*
 
 `uv build` produces a wheel and source distribution in `dist/` using the
 standard Python build configuration in `pyproject.toml`.
+
+## Continuous integration and publishing
+
+[Tests](https://github.com/sovinbirla/causal-toolkit-sovinbirla/actions/workflows/tests.yml)
+runs pytest with coverage on Python 3.11 for pushes to `main` and `develop`,
+and pull requests targeting `main`. It also builds both distributions, validates
+their metadata, and installs the wheel in a clean environment to check every
+public function import.
+
+The [publishing workflow](https://github.com/sovinbirla/causal-toolkit-sovinbirla/actions/workflows/publish.yml)
+runs when a GitHub release is published. To configure the first release:
+
+1. Create a [PyPI account](https://pypi.org/account/register/) and generate an API
+   token in account settings. A first upload needs an account-scoped token.
+2. Open the repository's **Settings → Secrets and variables → Actions** and add
+   the token as a repository secret named `PYPI_API_TOKEN`.
+3. Confirm the Tests workflow passes for the commit you will release.
+4. Create and publish a GitHub release tagged `v0.1.1` from `main`.
+
+The workflow checks that the tag, `pyproject.toml`, and package version agree,
+runs the tests, builds and checks the distributions, uploads to PyPI, then
+installs the published version in a clean environment and checks all public
+imports. For subsequent releases, update both version strings and use a matching
+tag. PyPI requires a new version for each upload.
+
+For a manual upload, set `TWINE_USERNAME=__token__` and supply your token securely
+through `TWINE_PASSWORD` or Twine's password prompt, then run:
+
+```bash
+python -m pytest tests/ -v
+python -m build
+python -m twine check --strict dist/*
+python -m twine upload dist/*
+```
+
+Start with an empty `dist/` directory so older versions are not uploaded again.
+Never commit API tokens or paste them into source files.
 
 ## Source and license
 

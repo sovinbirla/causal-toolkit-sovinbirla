@@ -9,7 +9,7 @@ from .meta_learners import (
 from .propensity import doubly_robust, ipw
 from .rct import calculate_ate_ci, calculate_ate_pvalue
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = [
     "calculate_ate_ci",
