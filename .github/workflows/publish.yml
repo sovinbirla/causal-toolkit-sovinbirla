@@ -47,11 +47,11 @@ jobs:
       - name: Publish to PyPI
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN || secrets.MYKEY }}
           TWINE_NON_INTERACTIVE: "1"
         run: |
           if [ -z "$TWINE_PASSWORD" ]; then
-            echo '::error::Add the PYPI_API_TOKEN repository secret before publishing.'
+            echo '::error::Add the PYPI_API_TOKEN (or MYKEY) repository secret before publishing.'
             exit 1
           fi
           python -m twine upload dist/*

@@ -163,7 +163,8 @@ runs when a GitHub release is published. To configure the first release:
 1. Create a [PyPI account](https://pypi.org/account/register/) and generate an API
    token in account settings. A first upload needs an account-scoped token.
 2. Open the repository's **Settings → Secrets and variables → Actions** and add
-   the token as a repository secret named `PYPI_API_TOKEN`.
+   the token as a repository secret named `PYPI_API_TOKEN`. The workflow also
+   accepts `MYKEY`, the name configured for this repository's initial release.
 3. Confirm the Tests workflow passes for the commit you will release.
 4. Create and publish a GitHub release tagged `v0.1.1` from `main`.
 
